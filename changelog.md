@@ -78,3 +78,44 @@
   - `backend/app/models/schemas.py`
   - `backend/app/main.py`
   - `backend/tests/test_upload.py`
+
+## [Session 3] - 2026-01-29
+
+### Task 5: FloorPlanCanvas Component
+- Created `FloorPlanCanvas` component using react-konva `Stage`, `Layer`, and `Image`
+- Component accepts `imageSrc` (URL), optional `width`/`height` props
+- Shows empty state placeholder when no image is loaded
+- Auto-sizes stage to image natural dimensions, with fallback to 800x600
+- Loads image via `HTMLImageElement` in a `useEffect`, handles load errors gracefully
+- Created 11 tests with mocked react-konva (Konva requires real canvas, unavailable in jsdom):
+  - Empty state rendering, Konva stage presence, image loading, natural dimension sizing,
+    custom dimension override, default dimensions before load, no image before load,
+    clearing image on null src, error handling
+- All 30 frontend tests passing
+- Files created:
+  - `frontend/src/components/FloorPlanCanvas/FloorPlanCanvas.tsx`
+  - `frontend/src/components/FloorPlanCanvas/FloorPlanCanvas.test.tsx`
+
+### Task 6: ImageUploader Component + App Integration
+- Created API client at `frontend/src/api/client.ts` with:
+  - `UploadResponse` interface matching backend schema
+  - `uploadImage(file)` - POSTs file as FormData to `/upload/`, returns metadata
+  - `getImageUrl(imageId)` - builds URL to retrieve uploaded image by ID
+- Created `ImageUploader` component with:
+  - Hidden file input (PNG/JPEG only) triggered by styled upload button
+  - Local preview via `URL.createObjectURL` shown after file selection
+  - Async upload to backend with loading/disabled state during upload
+  - Error display for invalid file types and upload failures
+  - Error clearing on subsequent valid file selection
+- Created 9 tests with mocked API client:
+  - Button rendering, hidden input, file dialog trigger, invalid type error,
+    preview display, onUpload callback, uploading state, error on failure,
+    error clearing on retry
+- Rewired `App.tsx` to use `ImageUploader` + `FloorPlanCanvas`:
+  - Upload triggers `getImageUrl` which is passed as `imageSrc` to canvas
+- All 39 frontend tests passing, all 12 backend tests passing
+- Files created/modified:
+  - `frontend/src/api/client.ts`
+  - `frontend/src/components/ImageUploader/ImageUploader.tsx`
+  - `frontend/src/components/ImageUploader/ImageUploader.test.tsx`
+  - `frontend/src/App.tsx` (rewritten)

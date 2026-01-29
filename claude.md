@@ -80,8 +80,8 @@ floorplanner/
 - [x] Task 4: Backend - Image upload endpoint (accept PNG/JPEG, store in memory/temp) + tests
 
 ### Phase 2: Core Canvas
-- [ ] Task 5: FloorPlanCanvas component - display uploaded image on Konva Stage
-- [ ] Task 6: ImageUploader component - file input, preview, upload to backend, wire into App.tsx with FloorPlanCanvas to display the uploaded image
+- [x] Task 5: FloorPlanCanvas component - display uploaded image on Konva Stage
+- [x] Task 6: ImageUploader component - file input, preview, upload to backend, wire into App.tsx with FloorPlanCanvas to display the uploaded image
 
 ### Phase 3: Calibration
 - [ ] Task 7: CalibrationTool component + useCalibration hook - draw a reference line on canvas, input real-world length (cm), calculate and store pixel ratio
@@ -145,5 +145,5 @@ PYTHONPATH="" uv run pytest -v
 ```
 
 ## Current Status
-Last completed: Task 4
-Next task: Task 5
+Last completed: Task 6
+Next task: Task 7
