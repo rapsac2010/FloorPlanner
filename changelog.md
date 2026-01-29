@@ -41,3 +41,40 @@
   - Cm-to-pixels: normal, zero cm, zero ratio
   - Round-trip: pixels→cm→pixels, cm→pixels→cm
 - All 19 tests passing
+
+## [Session 2] - 2026-01-29
+
+### Task 2: Health Endpoint Test + CORS Middleware
+- Created `backend/tests/test_health.py` with 2 tests:
+  - `test_health_check` - verifies GET /health returns `{"status": "ok"}`
+  - `test_health_check_method_not_allowed` - verifies POST /health returns 405
+- Added CORS middleware to FastAPI app allowing `http://localhost:5173` (Vite dev server)
+- Files created/modified:
+  - `backend/tests/test_health.py`
+  - `backend/app/main.py`
+
+### Task 3: CORS Middleware Test
+- Created `backend/tests/test_cors.py` with 3 tests:
+  - `test_cors_allows_frontend_origin` - preflight from localhost:5173 returns correct headers
+  - `test_cors_blocks_unknown_origin` - preflight from unknown origin is rejected
+  - `test_cors_allows_credentials` - credentials are allowed for frontend origin
+- Files created:
+  - `backend/tests/test_cors.py`
+
+### Task 4: Image Upload Endpoint
+- Created `backend/app/models/schemas.py` with `UploadResponse` Pydantic model (image_id, filename, content_type, width, height)
+- Created `backend/app/routers/upload.py` with:
+  - `ImageStore` class - in-memory image storage with save/get/clear
+  - `_get_image_dimensions` - extracts width/height from PNG (IHDR) and JPEG (SOF0/SOF2) headers without external deps
+  - `POST /upload/` - validates file type (PNG/JPEG), size (10 MB max), extracts dimensions, stores in memory
+  - `GET /upload/{image_id}` - retrieves stored image by ID
+- Created `backend/tests/test_upload.py` with 7 tests:
+  - Upload valid PNG, upload valid JPEG, reject invalid type, reject empty file, reject corrupt image, retrieve uploaded image, 404 for nonexistent image
+  - Includes helpers `_make_png` and `_make_jpeg` to generate minimal valid image bytes for testing
+- Registered upload router in `main.py`
+- All 12 backend tests passing, all 19 frontend tests passing
+- Files created/modified:
+  - `backend/app/routers/upload.py`
+  - `backend/app/models/schemas.py`
+  - `backend/app/main.py`
+  - `backend/tests/test_upload.py`

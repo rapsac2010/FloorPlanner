@@ -75,44 +75,40 @@ floorplanner/
 ### Phase 1: Foundation
 - [x] Task 0: Initialize Project Structure
 - [x] Task 1: Geometry Utilities (pure functions + tests)
-- [ ] Task 2: Backend - Basic FastAPI setup with health endpoint + test
-- [ ] Task 3: Backend - Image upload endpoint (accept PNG/JPEG, store in memory/temp) + tests
+- [x] Task 2: Backend - Health endpoint test + CORS middleware for frontend (port 5173)
+- [x] Task 3: Backend - CORS middleware configuration (allow frontend on port 5173) + test
+- [x] Task 4: Backend - Image upload endpoint (accept PNG/JPEG, store in memory/temp) + tests
 
 ### Phase 2: Core Canvas
-- [ ] Task 4: FloorPlanCanvas component - display uploaded image on Konva Stage
-- [ ] Task 5: ImageUploader component - file input, preview, upload to backend
-- [ ] Task 6: Integration - upload image and display on canvas
+- [ ] Task 5: FloorPlanCanvas component - display uploaded image on Konva Stage
+- [ ] Task 6: ImageUploader component - file input, preview, upload to backend, wire into App.tsx with FloorPlanCanvas to display the uploaded image
 
 ### Phase 3: Calibration
-- [ ] Task 7: CalibrationTool component - draw a single line on canvas
-- [ ] Task 8: CalibrationTool - input field for real-world length (cm)
-- [ ] Task 9: useCalibration hook - store calibration state, calculate ratio
-- [ ] Task 10: Display calibration status and current ratio
+- [ ] Task 7: CalibrationTool component + useCalibration hook - draw a reference line on canvas, input real-world length (cm), calculate and store pixel ratio
+- [ ] Task 8: Calibration UI - display calibration status, current ratio, and allow recalibration
 
 ### Phase 4: Measurement
-- [ ] Task 11: MeasurementTool component - draw lines anywhere on canvas
-- [ ] Task 12: useMeasurement hook - track all measurement lines
-- [ ] Task 13: Display real-world measurements on each line (using calibration)
-- [ ] Task 14: Allow deleting/editing measurements
+- [ ] Task 9: MeasurementTool component + useMeasurement hook - draw lines on canvas, track all measurements
+- [ ] Task 10: Display real-world measurements on each line (using calibration ratio)
+- [ ] Task 11: Allow deleting/editing measurements
 
 ### Phase 5: Shape Drawing
-- [ ] Task 15: ShapeDrawer component - separate canvas/stage for shapes
-- [ ] Task 16: Line drawing tool with length input (cm)
-- [ ] Task 17: Rectangle drawing tool with width/height inputs (cm)
-- [ ] Task 18: Circle drawing tool with radius input (cm)
-- [ ] Task 19: useShapes hook - manage shape state
-- [ ] Task 20: Shape merging/grouping functionality
+- [ ] Task 12: ShapeDrawer component + useShapes hook - separate canvas/stage for shapes, manage shape state
+- [ ] Task 13: Line drawing tool with length input (cm)
+- [ ] Task 14: Rectangle drawing tool with width/height inputs (cm)
+- [ ] Task 15: Circle drawing tool with radius input (cm)
+- [ ] Task 16: Shape merging/grouping functionality
 
 ### Phase 6: AI Integration (Optional)
-- [ ] Task 21: Backend - image generation proxy endpoint
-- [ ] Task 22: Frontend - prompt input for selected bounding box
-- [ ] Task 23: Display generated image within bounds
+- [ ] Task 17: Backend - image generation proxy endpoint
+- [ ] Task 18: Frontend - prompt input for selected bounding box
+- [ ] Task 19: Display generated image within bounds
 
 ### Phase 7: Polish
-- [ ] Task 24: Toolbar component - tool selection UI
-- [ ] Task 25: Undo/redo functionality
-- [ ] Task 26: Export measurements as JSON/CSV
-- [ ] Task 27: Save/load project state
+- [ ] Task 20: Toolbar component - tool selection UI
+- [ ] Task 21: Undo/redo functionality
+- [ ] Task 22: Export measurements as JSON/CSV
+- [ ] Task 23: Save/load project state
 
 ## Environment Notes
 
@@ -123,7 +119,7 @@ floorplanner/
 - **Tailwind CSS v4**: Uses the Vite plugin (`@tailwindcss/vite`), imported in `src/index.css` as `@import "tailwindcss"`. No `tailwind.config.js` needed — v4 uses CSS-based config.
 - **TypeScript**: `tsconfig.app.json` has `vitest/globals` in types array for global test helpers.
 - **Backend app**: FastAPI app is in `backend/app/main.py`. The `/health` endpoint already exists. The conftest at `backend/tests/conftest.py` provides an async `client` fixture using `httpx.AsyncClient` with `ASGITransport`.
-- **pytest-asyncio**: Configured with `asyncio_mode = "auto"` in `pyproject.toml` so async test functions don't need the `@pytest.mark.asyncio` decorator.
+- **pytest-asyncio**: Configured with `asyncio_mode = "strict"` in `pyproject.toml`. Auto mode conflicts with the `anyio` plugin (transitive dep of httpx). Async test functions need `@pytest.mark.asyncio` and async fixtures need `@pytest_asyncio.fixture`.
 
 ## Commands Reference
 
@@ -149,5 +145,5 @@ PYTHONPATH="" uv run pytest -v
 ```
 
 ## Current Status
-Last completed: Task 1
-Next task: Task 2
+Last completed: Task 4
+Next task: Task 5
