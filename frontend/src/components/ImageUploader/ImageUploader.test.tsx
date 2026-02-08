@@ -11,14 +11,8 @@ vi.mock('../../api/client', () => ({
 import { uploadImage } from '../../api/client';
 const mockUploadImage = vi.mocked(uploadImage);
 
-// Mock URL.createObjectURL
-const mockCreateObjectURL = vi.fn(() => 'blob:mock-preview-url');
-const mockRevokeObjectURL = vi.fn();
-
 beforeEach(() => {
   vi.clearAllMocks();
-  window.URL.createObjectURL = mockCreateObjectURL;
-  window.URL.revokeObjectURL = mockRevokeObjectURL;
 });
 
 function createMockFile(name: string, type: string): File {
@@ -62,29 +56,6 @@ describe('ImageUploader', () => {
     fireEvent.change(input);
 
     expect(screen.getByTestId('upload-error')).toHaveTextContent('Please select a PNG or JPEG image.');
-  });
-
-  it('shows preview after selecting a valid file', async () => {
-    const user = userEvent.setup();
-    mockUploadImage.mockResolvedValue({
-      image_id: 'abc123',
-      filename: 'plan.png',
-      content_type: 'image/png',
-      width: 800,
-      height: 600,
-    });
-
-    render(<ImageUploader onUpload={vi.fn()} />);
-
-    const file = createMockFile('plan.png', 'image/png');
-    const input = screen.getByTestId('file-input');
-
-    await user.upload(input, file);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('upload-preview')).toBeInTheDocument();
-    });
-    expect(mockCreateObjectURL).toHaveBeenCalledWith(file);
   });
 
   it('calls onUpload with response after successful upload', async () => {

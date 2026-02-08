@@ -2,6 +2,7 @@ import React, { useCallback, useRef, useState } from 'react';
 import type { UploadResponse } from '../../api/client';
 import { uploadImage } from '../../api/client';
 
+
 interface ImageUploaderProps {
   /** Called when an image is successfully uploaded */
   onUpload: (response: UploadResponse) => void;
@@ -11,10 +12,9 @@ const ACCEPTED_TYPES = ['image/png', 'image/jpeg'];
 
 /**
  * File input component for uploading floor plan images.
- * Shows a preview of the selected file and uploads it to the backend.
+ * Uploads a floor plan image to the backend.
  */
 export const ImageUploader: React.FC<ImageUploaderProps> = ({ onUpload }) => {
-  const [preview, setPreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -26,15 +26,10 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ onUpload }) => {
 
       if (!ACCEPTED_TYPES.includes(file.type)) {
         setError('Please select a PNG or JPEG image.');
-        setPreview(null);
         return;
       }
 
       setError(null);
-
-      // Show local preview
-      const objectUrl = URL.createObjectURL(file);
-      setPreview(objectUrl);
 
       // Upload to backend
       setUploading(true);
@@ -43,7 +38,6 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ onUpload }) => {
         onUpload(response);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Upload failed');
-        setPreview(null);
       } finally {
         setUploading(false);
       }
@@ -82,14 +76,6 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ onUpload }) => {
         </p>
       )}
 
-      {preview && !error && (
-        <img
-          src={preview}
-          alt="Floor plan preview"
-          data-testid="upload-preview"
-          className="max-w-xs max-h-48 rounded border border-gray-300"
-        />
-      )}
     </div>
   );
 };
