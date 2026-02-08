@@ -1,5 +1,16 @@
 # Changelog
 
+## [Session 4] - 2026-02-08
+
+### Bug Fix: Duplicate Image on Upload
+- Removed local preview from `ImageUploader` component — the image was displayed both as a blob preview in ImageUploader and on the FloorPlanCanvas, causing it to appear twice
+- Removed unused `preview` state, `URL.createObjectURL` call, and preview `<img>` element
+- Removed corresponding preview test and `createObjectURL`/`revokeObjectURL` mocks
+- All 38 frontend tests passing
+- Files modified:
+  - `frontend/src/components/ImageUploader/ImageUploader.tsx`
+  - `frontend/src/components/ImageUploader/ImageUploader.test.tsx`
+
 ## [Session 1] - 2026-01-29
 
 ### Task 0: Initialize Project Structure
