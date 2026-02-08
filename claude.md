@@ -84,8 +84,8 @@ floorplanner/
 - [x] Task 6: ImageUploader component - file input, preview, upload to backend, wire into App.tsx with FloorPlanCanvas to display the uploaded image
 
 ### Phase 3: Calibration
-- [ ] Task 7: CalibrationTool component + useCalibration hook - draw a reference line on canvas, input real-world length (cm), calculate and store pixel ratio
-- [ ] Task 8: Calibration UI - display calibration status, current ratio, and allow recalibration
+- [x] Task 7: CalibrationTool component + useCalibration hook - draw a reference line on canvas, input real-world length (cm), calculate and store pixel ratio
+- [x] Task 8: Calibration UI - display calibration status, current ratio, and allow recalibration
 
 ### Phase 4: Measurement
 - [ ] Task 9: MeasurementTool component + useMeasurement hook - draw lines on canvas, track all measurements
@@ -145,5 +145,5 @@ PYTHONPATH="" uv run pytest -v
 ```
 
 ## Current Status
-Last completed: Task 6
-Next task: Task 7
+Last completed: Task 8
+Next task: Task 9

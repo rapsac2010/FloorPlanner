@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Stage, Layer, Image as KonvaImage } from 'react-konva';
+import type { KonvaEventObject } from 'konva/lib/Node';
 
 interface FloorPlanCanvasProps {
   /** The image source URL to display on the canvas */
@@ -8,16 +9,23 @@ interface FloorPlanCanvasProps {
   width?: number;
   /** Optional height override for the stage (defaults to image height) */
   height?: number;
+  /** Handler for clicks on the stage (receives position in stage coordinates) */
+  onStageClick?: (position: { x: number; y: number }) => void;
+  /** Additional Konva layers to render above the image layer */
+  children?: React.ReactNode;
 }
 
 /**
  * Displays an uploaded floor plan image on a Konva Stage.
  * The stage auto-sizes to the image dimensions unless overridden.
+ * Accepts children (additional Konva layers) and an onStageClick handler.
  */
 export const FloorPlanCanvas: React.FC<FloorPlanCanvasProps> = ({
   imageSrc,
   width,
   height,
+  onStageClick,
+  children,
 }) => {
   const [image, setImage] = useState<HTMLImageElement | null>(null);
 
@@ -53,12 +61,22 @@ export const FloorPlanCanvas: React.FC<FloorPlanCanvasProps> = ({
     );
   }
 
+  const handleStageClick = (e: KonvaEventObject<MouseEvent>) => {
+    if (!onStageClick) return;
+    const stage = e.target.getStage();
+    const pos = stage?.getPointerPosition();
+    if (pos) {
+      onStageClick({ x: pos.x, y: pos.y });
+    }
+  };
+
   return (
     <div data-testid="floor-plan-canvas">
-      <Stage width={stageWidth} height={stageHeight}>
+      <Stage width={stageWidth} height={stageHeight} onClick={handleStageClick}>
         <Layer>
           {image && <KonvaImage image={image} width={stageWidth} height={stageHeight} />}
         </Layer>
+        {children}
       </Stage>
     </div>
   );

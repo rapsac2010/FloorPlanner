@@ -2,16 +2,26 @@ import { act, render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { FloorPlanCanvas } from './FloorPlanCanvas';
 
+// Track the last onClick handler passed to Stage
+let lastStageOnClick: ((e: unknown) => void) | undefined;
+
 // Mock react-konva since Konva requires a real canvas
 vi.mock('react-konva', () => ({
-  Stage: ({ children, width, height }: { children: React.ReactNode; width: number; height: number }) => (
-    <div data-testid="konva-stage" data-width={width} data-height={height}>{children}</div>
-  ),
+  Stage: ({ children, width, height, onClick }: { children: React.ReactNode; width: number; height: number; onClick?: (e: unknown) => void }) => {
+    lastStageOnClick = onClick;
+    return <div data-testid="konva-stage" data-width={width} data-height={height}>{children}</div>;
+  },
   Layer: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="konva-layer">{children}</div>
   ),
   Image: ({ image, width, height }: { image: HTMLImageElement; width: number; height: number }) => (
     <img data-testid="konva-image" src={image?.src} data-width={width} data-height={height} />
+  ),
+  Line: ({ points, stroke }: { points: number[]; stroke: string }) => (
+    <div data-testid="konva-line" data-points={points.join(',')} data-stroke={stroke} />
+  ),
+  Circle: ({ x, y, radius }: { x: number; y: number; radius: number }) => (
+    <div data-testid="konva-circle" data-x={x} data-y={y} data-radius={radius} />
   ),
 }));
 
@@ -122,5 +132,45 @@ describe('FloorPlanCanvas', () => {
     // Should still show the stage wrapper, but no image
     expect(screen.getByTestId('floor-plan-canvas')).toBeInTheDocument();
     expect(screen.queryByTestId('konva-image')).not.toBeInTheDocument();
+  });
+
+  it('calls onStageClick with pointer position when stage is clicked', () => {
+    const handleClick = vi.fn();
+    render(<FloorPlanCanvas imageSrc="http://example.com/plan.png" onStageClick={handleClick} />);
+
+    // Simulate a Konva-like click event
+    const mockEvent = {
+      target: {
+        getStage: () => ({
+          getPointerPosition: () => ({ x: 150, y: 250 }),
+        }),
+      },
+    };
+    lastStageOnClick?.(mockEvent);
+
+    expect(handleClick).toHaveBeenCalledWith({ x: 150, y: 250 });
+  });
+
+  it('does not crash when onStageClick is not provided and stage is clicked', () => {
+    render(<FloorPlanCanvas imageSrc="http://example.com/plan.png" />);
+    // Clicking should be harmless when no onStageClick is provided
+    const mockEvent = {
+      target: {
+        getStage: () => ({
+          getPointerPosition: () => ({ x: 50, y: 50 }),
+        }),
+      },
+    };
+    expect(() => lastStageOnClick?.(mockEvent)).not.toThrow();
+  });
+
+  it('renders children inside the stage', () => {
+    render(
+      <FloorPlanCanvas imageSrc="http://example.com/plan.png">
+        <div data-testid="child-layer">overlay</div>
+      </FloorPlanCanvas>
+    );
+    const stage = screen.getByTestId('konva-stage');
+    expect(stage).toContainElement(screen.getByTestId('child-layer'));
   });
 });

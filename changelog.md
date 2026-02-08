@@ -1,5 +1,44 @@
 # Changelog
 
+## [Session 5] - 2026-02-08
+
+### Task 7: CalibrationTool component + useCalibration hook
+- Created `useCalibration` hook managing the full calibration workflow:
+  - States: `idle` → `placing-start` → `placing-end` → `awaiting-input` → `calibrated`
+  - `startCalibration()`, `handleCanvasClick()`, `setRealWorldLength()`, `resetCalibration()`
+  - Computes cm-per-pixel ratio using existing `calculateDistance` and `calculatePixelRatio` utilities
+- Created `CalibrationOverlay` component (Konva Layer) that renders:
+  - Reference line (dashed blue) between start and end points
+  - Circle markers at each endpoint
+- Modified `FloorPlanCanvas` to accept:
+  - `children` prop for additional Konva layers (overlay rendering)
+  - `onStageClick` prop forwarding pointer position from Konva stage events
+- Created 11 tests for `useCalibration` hook covering all state transitions and edge cases
+- Updated FloorPlanCanvas tests with 3 new tests for `onStageClick` and `children`
+- Files created:
+  - `frontend/src/hooks/useCalibration.ts`
+  - `frontend/src/hooks/useCalibration.test.ts`
+  - `frontend/src/components/CalibrationTool/CalibrationTool.tsx`
+  - `frontend/src/components/CalibrationTool/CalibrationTool.test.tsx`
+- Files modified:
+  - `frontend/src/components/FloorPlanCanvas/FloorPlanCanvas.tsx`
+  - `frontend/src/components/FloorPlanCanvas/FloorPlanCanvas.test.tsx`
+  - `frontend/src/App.tsx`
+
+### Task 8: Calibration UI - status display, ratio, recalibration
+- Added persistent status badge with colored indicator dot:
+  - Gray dot + "Not calibrated" (idle)
+  - Yellow dot + "Calibrating..." (placing-start/placing-end/awaiting-input)
+  - Green dot + "Calibrated" (calibrated)
+- Added Cancel button during all calibration steps (placing-start, placing-end, awaiting-input)
+- CalibrationTool shows "Calibrate" button when idle, instructions during point placement, length input form when line is drawn, and ratio + "Recalibrate" button when complete
+- CalibrationTool only renders below canvas when an image is uploaded
+- Added 7 new tests for status badge and cancel button functionality
+- All 73 frontend tests passing, all 12 backend tests passing
+- Files modified:
+  - `frontend/src/components/CalibrationTool/CalibrationTool.tsx`
+  - `frontend/src/components/CalibrationTool/CalibrationTool.test.tsx`
+
 ## [Session 4] - 2026-02-08
 
 ### Bug Fix: Duplicate Image on Upload
