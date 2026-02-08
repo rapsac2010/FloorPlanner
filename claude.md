@@ -88,9 +88,9 @@ floorplanner/
 - [x] Task 8: Calibration UI - display calibration status, current ratio, and allow recalibration
 
 ### Phase 4: Measurement
-- [ ] Task 9: MeasurementTool component + useMeasurement hook - draw lines on canvas, track all measurements
-- [ ] Task 10: Display real-world measurements on each line (using calibration ratio)
-- [ ] Task 11: Allow deleting/editing measurements
+- [x] Task 9: MeasurementTool component + useMeasurement hook - draw lines on canvas, track all measurements
+- [x] Task 10: Display real-world measurements on each line (using calibration ratio)
+- [x] Task 11: Allow deleting/editing measurements
 
 ### Phase 5: Shape Drawing
 - [ ] Task 12: ShapeDrawer component + useShapes hook - separate canvas/stage for shapes, manage shape state
@@ -164,5 +164,5 @@ PYTHONPATH="" uv run pytest -v
 ```
 
 ## Current Status
-Last completed: Task 8
-Next task: Task 9
+Last completed: Task 11
+Next task: Task 12

@@ -1,5 +1,74 @@
 # Changelog
 
+## [Session 8] - 2026-02-08
+
+### Task 11: Allow deleting/editing measurements + Shift-key straight lines
+- Added **measurement selection**: clicking a measurement item in the sidebar selects it
+  - Selected measurement is highlighted on the canvas (thicker line, larger endpoint circles, darker color)
+  - Clicking the same item again deselects it
+  - Selection clears automatically when starting a new measurement or deleting the selected item
+  - Delete button click does not trigger selection (event propagation stopped)
+- Added `selectedId` state and `selectMeasurement(id)` to `useMeasurement` hook
+- Added **shift-key axis snapping** for straight measurement lines:
+  - Holding Shift while placing the end point snaps to the nearest axis (horizontal or vertical)
+  - If the line is more horizontal (dx >= dy), snaps to a perfectly horizontal line
+  - If the line is more vertical (dy > dx), snaps to a perfectly vertical line
+  - Added `snapToAxis(start, end)` utility function in `geometry.ts`
+  - Shift hint displayed in the sidebar instruction during end-point placement
+- Extended `FloorPlanCanvas.onStageClick` to pass `shiftKey` boolean from the DOM event
+- Added 6 tests for `snapToAxis` utility
+- Added 5 tests for selection in `useMeasurement` hook
+- Added 5 tests for selection + shift hint in `MeasurementTool` component
+- Updated 1 existing FloorPlanCanvas test for `shiftKey` parameter
+- All 123 frontend tests passing, all 12 backend tests passing
+- Files modified:
+  - `frontend/src/utils/geometry.ts` (added `snapToAxis`)
+  - `frontend/src/utils/geometry.test.ts` (6 new tests)
+  - `frontend/src/hooks/useMeasurement.ts` (added `selectedId`, `selectMeasurement`)
+  - `frontend/src/hooks/useMeasurement.test.ts` (5 new tests)
+  - `frontend/src/components/MeasurementTool/MeasurementTool.tsx` (selection UI, shift hint, overlay highlighting)
+  - `frontend/src/components/MeasurementTool/MeasurementTool.test.tsx` (5 new tests)
+  - `frontend/src/components/FloorPlanCanvas/FloorPlanCanvas.tsx` (`shiftKey` passthrough)
+  - `frontend/src/components/FloorPlanCanvas/FloorPlanCanvas.test.tsx` (updated mock event)
+  - `frontend/src/App.tsx` (shift-key snap routing, selection wiring)
+
+## [Session 7] - 2026-02-08
+
+### Task 9: MeasurementTool component + useMeasurement hook
+- Created `useMeasurement` hook managing the full measurement workflow:
+  - States: `idle` → `placing-start` → `placing-end` → (measurement saved, back to `placing-start`)
+  - After completing a measurement, automatically continues in measuring mode for consecutive measurements
+  - `startMeasuring()`, `handleCanvasClick()`, `deleteMeasurement()`, `clearAllMeasurements()`, `cancelMeasuring()`
+  - Each measurement stores start/end points, pixel distance, and a unique ID
+- Created `MeasurementOverlay` component (Konva Layer) that renders:
+  - Orange measurement lines between start and end points
+  - Circle markers at each endpoint
+  - Active start point indicator while placing the end point
+- Created `MeasurementTool` sidebar component with:
+  - "Measure" button to start measuring
+  - Instructions during point placement
+  - "Stop measuring" cancel button
+  - List of completed measurements with delete buttons per item
+  - "Clear all" button to remove all measurements
+- Integrated into `App.tsx` with canvas click routing between calibration and measurement tools
+- Created 13 tests for `useMeasurement` hook covering all state transitions and edge cases
+- Created 21 tests for `MeasurementTool` and `MeasurementOverlay` components
+- Files created:
+  - `frontend/src/hooks/useMeasurement.ts`
+  - `frontend/src/hooks/useMeasurement.test.ts`
+  - `frontend/src/components/MeasurementTool/MeasurementTool.tsx`
+  - `frontend/src/components/MeasurementTool/MeasurementTool.test.tsx`
+- Files modified:
+  - `frontend/src/App.tsx`
+
+### Task 10: Display real-world measurements on each line
+- Measurement overlay renders `Text` labels at the midpoint of each measurement line
+- When calibrated: displays distance in cm (e.g. "150.0 cm") using `pixelsToCm` utility
+- When not calibrated: displays distance in pixels (e.g. "300.0 px") as fallback
+- Sidebar measurement list also shows cm/px values matching the overlay labels
+- Labels use orange color scheme with white shadow for readability over floor plan images
+- All 107 frontend tests passing, all 12 backend tests passing
+
 ## [Session 6] - 2026-02-08
 
 ### UI Refactor: Modern bubbly design with vintage measurement aesthetic

@@ -42,3 +42,22 @@ export function cmToPixels(cm: number, ratio: number): number {
   }
   return cm / ratio;
 }
+
+/**
+ * Snap an endpoint to the nearest axis-aligned direction relative to a start point.
+ * If the line is more horizontal, snaps to a perfectly horizontal line (same y).
+ * If the line is more vertical, snaps to a perfectly vertical line (same x).
+ * @param start - The fixed start point.
+ * @param end - The raw end point to snap.
+ * @returns A new point snapped to the nearest axis.
+ */
+export function snapToAxis(start: Point, end: Point): Point {
+  const dx = Math.abs(end.x - start.x);
+  const dy = Math.abs(end.y - start.y);
+  if (dx >= dy) {
+    // More horizontal → lock y
+    return { x: end.x, y: start.y };
+  }
+  // More vertical → lock x
+  return { x: start.x, y: end.y };
+}

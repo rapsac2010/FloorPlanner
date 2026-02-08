@@ -145,10 +145,11 @@ describe('FloorPlanCanvas', () => {
           getPointerPosition: () => ({ x: 150, y: 250 }),
         }),
       },
+      evt: { shiftKey: false },
     };
     lastStageOnClick?.(mockEvent);
 
-    expect(handleClick).toHaveBeenCalledWith({ x: 150, y: 250 });
+    expect(handleClick).toHaveBeenCalledWith({ x: 150, y: 250 }, false);
   });
 
   it('does not crash when onStageClick is not provided and stage is clicked', () => {

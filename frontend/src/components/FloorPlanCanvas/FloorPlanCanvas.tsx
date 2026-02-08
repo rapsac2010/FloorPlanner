@@ -9,8 +9,10 @@ interface FloorPlanCanvasProps {
   width?: number;
   /** Optional height override for the stage (defaults to image height) */
   height?: number;
-  /** Handler for clicks on the stage (receives position in stage coordinates) */
-  onStageClick?: (position: { x: number; y: number }) => void;
+  /** Handler for clicks on the stage (receives position in stage coordinates + modifier keys) */
+  onStageClick?: (position: { x: number; y: number }, shiftKey: boolean) => void;
+  /** Handler for mouse moves on the stage (receives position in stage coordinates + modifier keys) */
+  onStageMouseMove?: (position: { x: number; y: number }, shiftKey: boolean) => void;
   /** Additional Konva layers to render above the image layer */
   children?: React.ReactNode;
 }
@@ -25,6 +27,7 @@ export const FloorPlanCanvas: React.FC<FloorPlanCanvasProps> = ({
   width,
   height,
   onStageClick,
+  onStageMouseMove,
   children,
 }) => {
   const [image, setImage] = useState<HTMLImageElement | null>(null);
@@ -66,13 +69,22 @@ export const FloorPlanCanvas: React.FC<FloorPlanCanvasProps> = ({
     const stage = e.target.getStage();
     const pos = stage?.getPointerPosition();
     if (pos) {
-      onStageClick({ x: pos.x, y: pos.y });
+      onStageClick({ x: pos.x, y: pos.y }, e.evt.shiftKey);
+    }
+  };
+
+  const handleStageMouseMove = (e: KonvaEventObject<MouseEvent>) => {
+    if (!onStageMouseMove) return;
+    const stage = e.target.getStage();
+    const pos = stage?.getPointerPosition();
+    if (pos) {
+      onStageMouseMove({ x: pos.x, y: pos.y }, e.evt.shiftKey);
     }
   };
 
   return (
     <div data-testid="floor-plan-canvas">
-      <Stage width={stageWidth} height={stageHeight} onClick={handleStageClick}>
+      <Stage width={stageWidth} height={stageHeight} onClick={handleStageClick} onMouseMove={handleStageMouseMove}>
         <Layer>
           {image && <KonvaImage image={image} width={stageWidth} height={stageHeight} />}
         </Layer>

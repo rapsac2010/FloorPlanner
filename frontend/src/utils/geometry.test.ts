@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { calculateDistance, calculatePixelRatio, pixelsToCm, cmToPixels } from './geometry';
+import { calculateDistance, calculatePixelRatio, pixelsToCm, cmToPixels, snapToAxis } from './geometry';
 
 describe('calculateDistance', () => {
   it('returns 0 for the same point', () => {
@@ -81,6 +81,38 @@ describe('cmToPixels', () => {
 
   it('returns 0 when ratio is 0', () => {
     expect(cmToPixels(100, 0)).toBe(0);
+  });
+});
+
+describe('snapToAxis', () => {
+  it('snaps to horizontal when dx > dy', () => {
+    const result = snapToAxis({ x: 100, y: 100 }, { x: 250, y: 120 });
+    expect(result).toEqual({ x: 250, y: 100 });
+  });
+
+  it('snaps to vertical when dy > dx', () => {
+    const result = snapToAxis({ x: 100, y: 100 }, { x: 110, y: 300 });
+    expect(result).toEqual({ x: 100, y: 300 });
+  });
+
+  it('snaps to horizontal when dx equals dy (horizontal preference)', () => {
+    const result = snapToAxis({ x: 0, y: 0 }, { x: 50, y: 50 });
+    expect(result).toEqual({ x: 50, y: 0 });
+  });
+
+  it('works with negative direction (left)', () => {
+    const result = snapToAxis({ x: 200, y: 200 }, { x: 50, y: 210 });
+    expect(result).toEqual({ x: 50, y: 200 });
+  });
+
+  it('works with negative direction (up)', () => {
+    const result = snapToAxis({ x: 200, y: 200 }, { x: 205, y: 50 });
+    expect(result).toEqual({ x: 200, y: 50 });
+  });
+
+  it('returns same point when start equals end', () => {
+    const result = snapToAxis({ x: 100, y: 100 }, { x: 100, y: 100 });
+    expect(result).toEqual({ x: 100, y: 100 });
   });
 });
 

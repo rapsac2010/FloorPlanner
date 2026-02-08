@@ -185,9 +185,9 @@ export const CalibrationOverlay: React.FC<{
       <Circle
         x={startPoint.x}
         y={startPoint.y}
-        radius={5}
-        fill="#2563eb"
-        stroke="#1d4ed8"
+        radius={4}
+        fill="#000000"
+        stroke="#000000"
         strokeWidth={1}
       />
       {/* End point marker + line */}
@@ -196,9 +196,9 @@ export const CalibrationOverlay: React.FC<{
           <Circle
             x={endPoint.x}
             y={endPoint.y}
-            radius={5}
-            fill="#2563eb"
-            stroke="#1d4ed8"
+            radius={4}
+            fill="#000000"
+            stroke="#000000"
             strokeWidth={1}
           />
         </>
@@ -206,8 +206,8 @@ export const CalibrationOverlay: React.FC<{
       {showLine && (
         <Line
           points={[startPoint.x, startPoint.y, endPoint!.x, endPoint!.y]}
-          stroke="#2563eb"
-          strokeWidth={2}
+          stroke="#000000"
+          strokeWidth={1}
           dash={[6, 3]}
         />
       )}

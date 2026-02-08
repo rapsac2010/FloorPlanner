@@ -4,15 +4,45 @@ import { getImageUrl } from './api/client';
 import { FloorPlanCanvas } from './components/FloorPlanCanvas/FloorPlanCanvas';
 import { ImageUploader } from './components/ImageUploader/ImageUploader';
 import { CalibrationTool, CalibrationOverlay } from './components/CalibrationTool/CalibrationTool';
+import { MeasurementTool, MeasurementOverlay } from './components/MeasurementTool/MeasurementTool';
 import { useCalibration } from './hooks/useCalibration';
+import { useMeasurement } from './hooks/useMeasurement';
+import { snapToAxis } from './utils/geometry';
 
 function App() {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const calibration = useCalibration();
+  const measurement = useMeasurement();
 
   const handleUpload = (response: UploadResponse) => {
     setImageSrc(getImageUrl(response.image_id));
   };
+
+  /** Snap a point if shift is held during placing-end */
+  const applySnap = (point: { x: number; y: number }, shiftKey: boolean) => {
+    if (shiftKey && measurement.status === 'placing-end' && measurement.activeStartPoint) {
+      return snapToAxis(measurement.activeStartPoint, point);
+    }
+    return point;
+  };
+
+  /** Route canvas clicks to the active tool, with shift-key snapping for measurements */
+  const handleStageClick = (point: { x: number; y: number }, shiftKey: boolean) => {
+    if (calibration.isCalibrating) {
+      calibration.handleCanvasClick(point);
+    } else if (measurement.isMeasuring) {
+      measurement.handleCanvasClick(applySnap(point, shiftKey));
+    }
+  };
+
+  /** Route mouse moves for live measurement preview */
+  const handleStageMouseMove = (point: { x: number; y: number }, shiftKey: boolean) => {
+    if (measurement.isMeasuring) {
+      measurement.handleMouseMove(applySnap(point, shiftKey));
+    }
+  };
+
+  const hasActiveTool = calibration.isCalibrating || measurement.isMeasuring;
 
   return (
     <div className="flex flex-col h-screen bg-ruler overflow-hidden">
@@ -31,12 +61,21 @@ function App() {
           <div className="bg-white rounded-2xl shadow-lg overflow-hidden border-2 border-fp-border">
             <FloorPlanCanvas
               imageSrc={imageSrc}
-              onStageClick={calibration.isCalibrating ? calibration.handleCanvasClick : undefined}
+              onStageClick={hasActiveTool ? handleStageClick : undefined}
+              onStageMouseMove={measurement.isMeasuring ? handleStageMouseMove : undefined}
             >
               <CalibrationOverlay
                 status={calibration.status}
                 startPoint={calibration.startPoint}
                 endPoint={calibration.endPoint}
+              />
+              <MeasurementOverlay
+                measurements={measurement.measurements}
+                activeStartPoint={measurement.activeStartPoint}
+                cursorPoint={measurement.cursorPoint}
+                status={measurement.status}
+                pixelRatio={calibration.pixelRatio}
+                selectedId={measurement.selectedId}
               />
             </FloorPlanCanvas>
           </div>
@@ -60,6 +99,24 @@ function App() {
                 onStartCalibration={calibration.startCalibration}
                 onSetRealWorldLength={calibration.setRealWorldLength}
                 onReset={calibration.resetCalibration}
+              />
+            </div>
+          )}
+
+          {/* Measurement section */}
+          {imageSrc && (
+            <div className="px-5 pb-5">
+              <h2 className="text-[11px] font-bold uppercase tracking-wider text-fp-teal mb-3">Measurements</h2>
+              <MeasurementTool
+                status={measurement.status}
+                measurements={measurement.measurements}
+                pixelRatio={calibration.pixelRatio}
+                selectedId={measurement.selectedId}
+                onStartMeasuring={measurement.startMeasuring}
+                onCancel={measurement.cancelMeasuring}
+                onDeleteMeasurement={measurement.deleteMeasurement}
+                onClearAll={measurement.clearAllMeasurements}
+                onSelectMeasurement={measurement.selectMeasurement}
               />
             </div>
           )}
