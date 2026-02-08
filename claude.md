@@ -110,6 +110,25 @@ floorplanner/
 - [ ] Task 22: Export measurements as JSON/CSV
 - [ ] Task 23: Save/load project state
 
+## Color Palette
+
+Defined as Tailwind v4 theme variables in `frontend/src/index.css` under `@theme`.
+
+| Token          | Hex       | Usage                                    |
+|----------------|-----------|------------------------------------------|
+| `fp-sage`      | `#91C6BC` | Calibration buttons, success accents     |
+| `fp-sage-light`| `#B5D8D1` | Borders, subtle fills                    |
+| `fp-sage-dark` | `#6FA99F` | Hover states, calibrated status          |
+| `fp-teal`      | `#4B9DA9` | Primary buttons (upload), header bg, section labels |
+| `fp-teal-light`| `#6FB4BE` | Light accent                             |
+| `fp-teal-dark` | `#3A7F89` | Header border, text on cream             |
+| `fp-cream`     | `#F6F3C2` | Sidebar background                       |
+| `fp-cream-light`| `#FAF8DC`| Page background, status badge bg         |
+| `fp-cream-dark`| `#EDE8A0` | Section dividers, idle status dots       |
+| `fp-orange`    | `#E37434` | Error text, active calibration dot       |
+| `fp-orange-light`| `#F09A66`| Hover accent                           |
+| `fp-orange-dark`| `#C45E24` | Emphasis                                |
+
 ## Environment Notes
 
 - **Python**: 3.12, managed by `uv` (not pip). Pinned via `backend/.python-version`. The backend uses `uv run` to execute commands within the project venv.

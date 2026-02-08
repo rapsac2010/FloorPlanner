@@ -55,8 +55,8 @@ export const FloorPlanCanvas: React.FC<FloorPlanCanvasProps> = ({
 
   if (!imageSrc) {
     return (
-      <div data-testid="floor-plan-canvas-empty" className="flex items-center justify-center bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg" style={{ width: stageWidth, height: stageHeight }}>
-        <p className="text-gray-500">No floor plan loaded. Upload an image to get started.</p>
+      <div data-testid="floor-plan-canvas-empty" className="flex items-center justify-center bg-white/50 border-2 border-dashed border-gray-200 rounded-2xl" style={{ width: stageWidth, height: stageHeight }}>
+        <p className="text-gray-400 text-sm">No floor plan loaded. Upload an image to get started.</p>
       </div>
     );
   }

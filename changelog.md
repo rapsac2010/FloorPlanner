@@ -1,5 +1,29 @@
 # Changelog
 
+## [Session 6] - 2026-02-08
+
+### UI Refactor: Modern bubbly design with vintage measurement aesthetic
+- Introduced custom color palette (sage, teal, cream, orange) as Tailwind v4 `@theme` variables in `index.css`
+- **Layout**: Orange header bar with logo + two-tone "FloorPlanner" text (Fredoka One font), canvas area (centered in white rounded card), floating cream sidebar with rounded corners
+- **Logo**: Added `logo.png` to `frontend/public/` — circular framed in header with text stroke
+- **Bubbly style**: All buttons are pill-shaped (`rounded-full`), status badge is a pill, instruction text in rounded-xl cards, inputs in rounded-xl, canvas card in rounded-2xl with shadow-lg
+- **Floating sidebar**: Cream background (`bg-fp-cream`), rounded-2xl, detached from header with margin, shadow-lg
+- **Typography**: Fredoka One for logo text, Nunito for all UI elements, bold text throughout
+- **Borders**: `#0f0000` border on header, sidebar, floor plan card, and all buttons; text stroke on logo
+- **Ruler background**: Vintage graph-paper grid pattern on main area — warm parchment base with sepia-toned major/minor grid lines
+- Restyled all components (ImageUploader, CalibrationTool, FloorPlanCanvas empty state) to match
+- Added color palette documentation to `claude.md`
+- All 73 frontend tests still passing
+- Files modified:
+  - `frontend/src/index.css` (color palette, ruler background, border color)
+  - `frontend/index.html` (Google Fonts: Fredoka One + Nunito, page title)
+  - `frontend/src/App.tsx` (sidebar layout, orange header with logo, floating sidebar, ruler bg)
+  - `frontend/src/components/ImageUploader/ImageUploader.tsx` (pill button, bold, border)
+  - `frontend/src/components/CalibrationTool/CalibrationTool.tsx` (pill buttons, bold, borders)
+  - `frontend/src/components/FloorPlanCanvas/FloorPlanCanvas.tsx` (rounded empty state)
+  - `frontend/public/logo.png` (copied from project root)
+  - `claude.md` (color palette table)
+
 ## [Session 5] - 2026-02-08
 
 ### Task 7: CalibrationTool component + useCalibration hook

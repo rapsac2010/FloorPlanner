@@ -50,7 +50,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ onUpload }) => {
   }, []);
 
   return (
-    <div data-testid="image-uploader" className="flex flex-col items-center gap-4">
+    <div data-testid="image-uploader" className="flex flex-col gap-2">
       <input
         ref={fileInputRef}
         type="file"
@@ -64,14 +64,14 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ onUpload }) => {
         type="button"
         onClick={handleClick}
         disabled={uploading}
-        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full px-4 py-2.5 bg-fp-teal text-white rounded-full text-sm font-bold shadow-sm border-2 border-fp-border hover:bg-fp-teal-dark hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed transition-all"
         data-testid="upload-button"
       >
         {uploading ? 'Uploading...' : 'Upload Floor Plan'}
       </button>
 
       {error && (
-        <p data-testid="upload-error" className="text-red-600 text-sm">
+        <p data-testid="upload-error" className="text-fp-orange-dark text-xs mt-1 px-1">
           {error}
         </p>
       )}

@@ -1,1 +1,43 @@
 @import "tailwindcss";
+
+body {
+  font-family: 'Nunito', sans-serif;
+}
+
+@theme {
+  /* FloorPlanner Color Palette */
+  --color-fp-sage: #91C6BC;
+  --color-fp-sage-light: #B5D8D1;
+  --color-fp-sage-dark: #6FA99F;
+
+  --color-fp-teal: #4B9DA9;
+  --color-fp-teal-light: #6FB4BE;
+  --color-fp-teal-dark: #3A7F89;
+
+  --color-fp-cream: #F6F3C2;
+  --color-fp-cream-light: #FAF8DC;
+  --color-fp-cream-dark: #EDE8A0;
+
+  --color-fp-orange: #E37434;
+  --color-fp-orange-light: #F09A66;
+  --color-fp-orange-dark: #C45E24;
+
+  --color-fp-border: #0f0000;
+}
+
+/* Vintage ruler / graph-paper background */
+.bg-ruler {
+  background-color: #f5f0e8;
+  background-image:
+    /* Major grid lines every 80px */
+    linear-gradient(rgba(78, 60, 40, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(78, 60, 40, 0.12) 1px, transparent 1px),
+    /* Minor grid lines every 16px */
+    linear-gradient(rgba(78, 60, 40, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(78, 60, 40, 0.05) 1px, transparent 1px);
+  background-size:
+    80px 80px,
+    80px 80px,
+    16px 16px,
+    16px 16px;
+}

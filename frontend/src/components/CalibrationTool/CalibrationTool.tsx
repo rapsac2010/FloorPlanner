@@ -41,20 +41,20 @@ export const CalibrationTool: React.FC<CalibrationToolProps> = ({
   const isActive = status === 'placing-start' || status === 'placing-end' || status === 'awaiting-input';
 
   return (
-    <div data-testid="calibration-tool" className="mt-4 flex flex-col gap-2">
-      {/* Status badge */}
-      <div data-testid="calibration-status" className="flex items-center gap-2">
+    <div data-testid="calibration-tool" className="flex flex-col gap-3">
+      {/* Status pill */}
+      <div data-testid="calibration-status" className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/70 shadow-sm w-fit">
         <span
           data-testid="calibration-status-indicator"
-          className={`inline-block w-2.5 h-2.5 rounded-full ${
+          className={`inline-block w-2 h-2 rounded-full ${
             status === 'calibrated'
-              ? 'bg-green-500'
+              ? 'bg-fp-sage'
               : isActive
-                ? 'bg-yellow-500'
-                : 'bg-gray-400'
+                ? 'bg-fp-orange'
+                : 'bg-gray-300'
           }`}
         />
-        <span className="text-sm text-gray-600">
+        <span className="text-xs text-gray-600 font-bold">
           {status === 'calibrated' && 'Calibrated'}
           {isActive && 'Calibrating...'}
           {status === 'idle' && 'Not calibrated'}
@@ -66,21 +66,23 @@ export const CalibrationTool: React.FC<CalibrationToolProps> = ({
         <button
           data-testid="calibration-start-btn"
           onClick={onStartCalibration}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 w-fit"
+          className="w-full px-4 py-2.5 bg-fp-sage text-white rounded-full text-sm font-bold shadow-sm border-2 border-fp-border hover:bg-fp-sage-dark hover:shadow-md transition-all"
         >
           Calibrate
         </button>
       )}
 
       {status === 'placing-start' && (
-        <div className="flex items-center gap-3">
-          <p data-testid="calibration-instruction" className="text-blue-600 font-medium">
-            Click the start point of your reference line on the floor plan.
-          </p>
+        <div className="flex flex-col gap-2">
+          <div className="bg-fp-teal/10 rounded-xl px-3 py-2.5">
+            <p data-testid="calibration-instruction" className="text-xs text-fp-teal-dark font-bold leading-relaxed">
+              Click the start point of your reference line on the floor plan.
+            </p>
+          </div>
           <button
             data-testid="calibration-cancel-btn"
             onClick={onReset}
-            className="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 text-sm"
+            className="w-full px-3 py-2 bg-white text-gray-500 rounded-full text-xs font-bold shadow-sm border-2 border-fp-border hover:bg-gray-50 hover:text-gray-700 transition-all"
           >
             Cancel
           </button>
@@ -88,14 +90,16 @@ export const CalibrationTool: React.FC<CalibrationToolProps> = ({
       )}
 
       {status === 'placing-end' && (
-        <div className="flex items-center gap-3">
-          <p data-testid="calibration-instruction" className="text-blue-600 font-medium">
-            Click the end point of your reference line.
-          </p>
+        <div className="flex flex-col gap-2">
+          <div className="bg-fp-teal/10 rounded-xl px-3 py-2.5">
+            <p data-testid="calibration-instruction" className="text-xs text-fp-teal-dark font-bold leading-relaxed">
+              Click the end point of your reference line.
+            </p>
+          </div>
           <button
             data-testid="calibration-cancel-btn"
             onClick={onReset}
-            className="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 text-sm"
+            className="w-full px-3 py-2 bg-white text-gray-500 rounded-full text-xs font-bold shadow-sm border-2 border-fp-border hover:bg-gray-50 hover:text-gray-700 transition-all"
           >
             Cancel
           </button>
@@ -103,13 +107,13 @@ export const CalibrationTool: React.FC<CalibrationToolProps> = ({
       )}
 
       {status === 'awaiting-input' && (
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col gap-2.5">
           <form
             data-testid="calibration-form"
             onSubmit={handleSubmitLength}
-            className="flex items-center gap-2"
+            className="flex flex-col gap-2.5"
           >
-            <label htmlFor="calibration-length" className="text-sm font-medium text-gray-700">
+            <label htmlFor="calibration-length" className="text-xs font-bold text-gray-600">
               Reference length (cm):
             </label>
             <input
@@ -120,13 +124,13 @@ export const CalibrationTool: React.FC<CalibrationToolProps> = ({
               min="0.01"
               value={lengthInput}
               onChange={(e) => setLengthInput(e.target.value)}
-              className="w-24 px-2 py-1 border border-gray-300 rounded"
+              className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-fp-teal/30 focus:border-fp-teal"
               autoFocus
             />
             <button
               type="submit"
               data-testid="calibration-submit-btn"
-              className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700"
+              className="w-full px-4 py-2.5 bg-fp-sage text-white rounded-full text-sm font-bold shadow-sm border-2 border-fp-border hover:bg-fp-sage-dark hover:shadow-md transition-all"
             >
               Apply
             </button>
@@ -134,7 +138,7 @@ export const CalibrationTool: React.FC<CalibrationToolProps> = ({
           <button
             data-testid="calibration-cancel-btn"
             onClick={onReset}
-            className="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 text-sm"
+            className="w-full px-3 py-2 bg-white text-gray-500 rounded-full text-xs font-bold shadow-sm border-2 border-fp-border hover:bg-gray-50 hover:text-gray-700 transition-all"
           >
             Cancel
           </button>
@@ -142,14 +146,16 @@ export const CalibrationTool: React.FC<CalibrationToolProps> = ({
       )}
 
       {status === 'calibrated' && (
-        <div data-testid="calibration-result" className="flex items-center gap-3">
-          <span className="text-sm text-green-700 font-medium">
-            {pixelRatio?.toFixed(4)} cm/px
-          </span>
+        <div data-testid="calibration-result" className="flex flex-col gap-2.5">
+          <div className="px-3 py-2 bg-fp-sage/10 rounded-xl text-center">
+            <span className="text-sm text-fp-sage-dark font-semibold">
+              {pixelRatio?.toFixed(4)} cm/px
+            </span>
+          </div>
           <button
             data-testid="calibration-recalibrate-btn"
             onClick={onReset}
-            className="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 text-sm"
+            className="w-full px-3 py-2 bg-white text-gray-500 rounded-full text-xs font-bold shadow-sm border-2 border-fp-border hover:bg-gray-50 hover:text-gray-700 transition-all"
           >
             Recalibrate
           </button>
