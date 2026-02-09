@@ -1,5 +1,71 @@
 # Changelog
 
+## [Session 9] - 2026-02-09
+
+### Documentation: Reframe ShapeDrawer as Furniture Editor
+- Updated all project `.md` files (`claude.md`, `README.md`, `initial_run.md`) to replace "ShapeDrawer / Shape Drawing" with **Furniture Editor**
+- Renamed `ShapeDrawer/` → `FurnitureEditor/`, `useShapes.ts` → `useFurniture.ts` in architecture docs
+- Added new Task 16b: Place saved furniture on floor plan
+- Refined task descriptions to reflect the full workflow: design in pop-out editor → save → place on floor plan
+
+### Task 12: FurnitureEditor component + useFurniture hook
+- Created `useFurniture` hook managing furniture shape state:
+  - `shapes` array, `selectedShapeId`, `activeTool` (line/rectangle/circle)
+  - `addShape()`, `removeShape()`, `clearShapes()`, `selectShape()`, `setActiveTool()`
+  - Clears selection when activating a tool or removing the selected shape
+- Created `FurnitureEditorPanel` component with:
+  - Teal header with "Furniture Editor" title, Pop Out / Close buttons
+  - Own 800×600 Konva Stage with grid lines
+  - Drawing tool palette (Line, Rectangle, Circle buttons with active highlight)
+  - Shape list with per-item select, delete, and "Clear all"
+  - Formatted shape labels: "Line 50.0 cm", "Rect 80.0×60.0 cm", "Circle r=25.0 cm"
+- Created `FurnitureEditor` wrapper component with three modes:
+  - **Closed**: shows "Open Furniture Editor" button in sidebar
+  - **Inline**: full-screen centered overlay via `createPortal(…, document.body)` — escapes sidebar stacking context
+  - **Popped out**: renders in a separate browser window via `window.open()` + `createPortal()`, copies stylesheets from parent
+- Created `PopoutWindow` helper component for the pop-out window lifecycle
+- Added furniture shape types to `types/index.ts`: `FurnitureShapeLine`, `FurnitureShapeRectangle`, `FurnitureShapeCircle`, `FurnitureShape` union
+- Created 14 tests for `useFurniture` hook
+- Created 28 tests for `FurnitureEditor` and `FurnitureEditorPanel` components
+- Integrated into `App.tsx` with "Furniture" section in sidebar
+- Files created:
+  - `frontend/src/hooks/useFurniture.ts`
+  - `frontend/src/hooks/useFurniture.test.ts`
+  - `frontend/src/components/FurnitureEditor/FurnitureEditor.tsx`
+  - `frontend/src/components/FurnitureEditor/FurnitureEditor.test.tsx`
+- Files modified:
+  - `frontend/src/types/index.ts` (furniture shape types)
+  - `frontend/src/App.tsx` (FurnitureEditor integration)
+
+### Task 13: Line drawing tool with length input (cm)
+- Extended `useFurniture` hook with interactive drawing state machine:
+  - `drawingStatus`: `idle` → `placing-start` → `placing-end` → `awaiting-input` → (line created, back to `placing-start`)
+  - `activeStartPoint`, `activeEndPoint`, `cursorPoint` for tracking drawing progress
+  - `handleCanvasClick()`: places start/end points based on current status
+  - `handleMouseMove()`: updates cursor for live preview during `placing-end`
+  - `confirmLine(lengthCm)`: creates a `FurnitureShapeLine` from active points + entered length
+  - `cancelDrawing()`: resets to `placing-start` without losing existing shapes
+  - `isDrawing` computed boolean
+- Updated `FurnitureCanvas` to handle Konva stage click/mousemove events:
+  - Crosshair cursor when drawing is active
+  - Live dashed preview line with endpoint circles during `placing-end`
+  - Start point indicator before mouse moves
+  - Solid confirmed line with "? cm" label during `awaiting-input`
+- Updated `FurnitureEditorPanel` sidebar with:
+  - Step-by-step drawing instructions ("Click the start point…", "Click the end point…")
+  - Cancel button during all drawing steps
+  - Length input form with numeric input + "cm" label when `awaiting-input`
+  - Confirm button to finalize line with entered length
+- Added 15 drawing workflow tests for `useFurniture` hook
+- Added 8 drawing UI tests for `FurnitureEditorPanel` component
+- All 194 frontend tests passing, all 12 backend tests passing
+- Files modified:
+  - `frontend/src/hooks/useFurniture.ts` (drawing state + handlers)
+  - `frontend/src/hooks/useFurniture.test.ts` (15 new tests)
+  - `frontend/src/components/FurnitureEditor/FurnitureEditor.tsx` (canvas events, preview, length input, portal fix)
+  - `frontend/src/components/FurnitureEditor/FurnitureEditor.test.tsx` (8 new tests)
+  - `frontend/src/App.tsx` (new drawing props wiring)
+
 ## [Session 8] - 2026-02-08
 
 ### Task 11: Allow deleting/editing measurements + Shift-key straight lines

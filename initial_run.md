@@ -24,7 +24,7 @@ A web application that allows users to:
 1. Upload incomplete floor plan images (PNG, JPEG)
 2. Calibrate pixel-to-centimeter ratio by drawing a reference line
 3. Measure distances by drawing lines anywhere on the floor plan
-4. Create shapes (lines, rectangles, circles) with real-world dimensions in a separate drawing canvas
+4. Design furniture in a dedicated **Furniture Editor** (pop-out window) — draw lines, rectangles, and circles with real-world dimensions (cm), save designs, then place saved furniture onto the main floor plan canvas
 5. (Optional) Generate furniture images via AI within drawn bounding boxes
 
 ### Tech Stack (Required)
@@ -75,12 +75,12 @@ floorplanner/
 │   │   │   ├── ImageUploader/
 │   │   │   ├── CalibrationTool/
 │   │   │   ├── MeasurementTool/
-│   │   │   ├── ShapeDrawer/
+│   │   │   ├── FurnitureEditor/
 │   │   │   └── Toolbar/
 │   │   ├── hooks/
 │   │   │   ├── useCalibration.ts
 │   │   │   ├── useMeasurement.ts
-│   │   │   └── useShapes.ts
+│   │   │   └── useFurniture.ts
 │   │   ├── utils/
 │   │   │   ├── geometry.ts      # Pure functions for calculations
 │   │   │   ├── geometry.test.ts
@@ -150,13 +150,13 @@ You must write ALL of these tasks to `claude.md`. Mark Task 0 and Task 1 as your
 - [ ] Task 13: Display real-world measurements on each line (using calibration)
 - [ ] Task 14: Allow deleting/editing measurements
 
-### Phase 5: Shape Drawing
-- [ ] Task 15: ShapeDrawer component - separate canvas/stage for shapes
-- [ ] Task 16: Line drawing tool with length input (cm)
-- [ ] Task 17: Rectangle drawing tool with width/height inputs (cm)
-- [ ] Task 18: Circle drawing tool with radius input (cm)
-- [ ] Task 19: useShapes hook - manage shape state
-- [ ] Task 20: Shape merging/grouping functionality
+### Phase 5: Furniture Editor
+- [ ] Task 15: FurnitureEditor component + useFurniture hook — dedicated pop-out panel with its own Konva canvas for designing furniture shapes
+- [ ] Task 16: Line drawing tool with length input (cm) in Furniture Editor
+- [ ] Task 17: Rectangle drawing tool with width/height inputs (cm) in Furniture Editor
+- [ ] Task 18: Circle drawing tool with radius input (cm) in Furniture Editor
+- [ ] Task 19: Save/load furniture designs — serialize to JSON, persist to localStorage
+- [ ] Task 20: Place saved furniture on floor plan — select from library, click to place on main canvas, drag to reposition
 
 ### Phase 6: AI Integration (Optional)
 - [ ] Task 21: Backend - image generation proxy endpoint

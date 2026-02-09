@@ -5,14 +5,18 @@ import { FloorPlanCanvas } from './components/FloorPlanCanvas/FloorPlanCanvas';
 import { ImageUploader } from './components/ImageUploader/ImageUploader';
 import { CalibrationTool, CalibrationOverlay } from './components/CalibrationTool/CalibrationTool';
 import { MeasurementTool, MeasurementOverlay } from './components/MeasurementTool/MeasurementTool';
+import { FurnitureEditor } from './components/FurnitureEditor/FurnitureEditor';
 import { useCalibration } from './hooks/useCalibration';
 import { useMeasurement } from './hooks/useMeasurement';
+import { useFurniture } from './hooks/useFurniture';
 import { snapToAxis } from './utils/geometry';
 
 function App() {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
+  const [furnitureEditorOpen, setFurnitureEditorOpen] = useState(false);
   const calibration = useCalibration();
   const measurement = useMeasurement();
+  const furniture = useFurniture();
 
   const handleUpload = (response: UploadResponse) => {
     setImageSrc(getImageUrl(response.image_id));
@@ -117,6 +121,32 @@ function App() {
                 onDeleteMeasurement={measurement.deleteMeasurement}
                 onClearAll={measurement.clearAllMeasurements}
                 onSelectMeasurement={measurement.selectMeasurement}
+              />
+            </div>
+          )}
+
+          {/* Furniture Editor section */}
+          {imageSrc && (
+            <div className="px-5 pb-5">
+              <h2 className="text-[11px] font-bold uppercase tracking-wider text-fp-teal mb-3">Furniture</h2>
+              <FurnitureEditor
+                shapes={furniture.shapes}
+                selectedShapeId={furniture.selectedShapeId}
+                activeTool={furniture.activeTool}
+                drawingStatus={furniture.drawingStatus}
+                activeStartPoint={furniture.activeStartPoint}
+                activeEndPoint={furniture.activeEndPoint}
+                cursorPoint={furniture.cursorPoint}
+                onRemoveShape={furniture.removeShape}
+                onClearShapes={furniture.clearShapes}
+                onSelectShape={furniture.selectShape}
+                onSetActiveTool={furniture.setActiveTool}
+                onCanvasClick={furniture.handleCanvasClick}
+                onMouseMove={furniture.handleMouseMove}
+                onConfirmLine={furniture.confirmLine}
+                onCancelDrawing={furniture.cancelDrawing}
+                isOpen={furnitureEditorOpen}
+                onToggleOpen={() => setFurnitureEditorOpen((prev) => !prev)}
               />
             </div>
           )}

@@ -1,13 +1,13 @@
 # FloorPlanner
 
-A web application for working with floor plan images. Upload incomplete floor plans, calibrate pixel-to-real-world measurements, measure distances, draw shapes with real dimensions, and optionally generate furniture images via AI.
+A web application for working with floor plan images. Upload incomplete floor plans, calibrate pixel-to-real-world measurements, measure distances, design furniture in a pop-out editor with real-world dimensions, place furniture on the floor plan, and optionally generate furniture images via AI.
 
 ## Features
 
 - **Image Upload** - Upload floor plan images (PNG, JPEG)
 - **Calibration** - Draw a reference line and set its real-world length to establish a pixel-to-cm ratio
 - **Measurement** - Draw lines on the floor plan to measure real-world distances
-- **Shape Drawing** - Create lines, rectangles, and circles with dimensions in centimeters
+- **Furniture Editor** - Design furniture in a pop-out editor using lines, rectangles, and circles with real-world dimensions (cm), save designs, then place them onto the floor plan
 - **AI Generation** *(optional)* - Generate furniture images within drawn bounding boxes
 
 ## Tech Stack
